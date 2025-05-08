@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Crypto Crash</title></head>
+<body>
+  <h1>Crypto Crash Game</h1>
+  <div id="log"></div>
+  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:5000');
+    const log = document.getElementById('log');
+
+    function logEvent(msg) {
+      const p = document.createElement('p');
+      p.innerText = msg;
+      log.appendChild(p);
+    }
+
+    socket.on('roundStart', data => logEvent('Round started. Crash at: ' + data.crashPoint));
+    socket.on('multiplierUpdate', data => logEvent('Multiplier: ' + data.multiplier));
+    socket.on('roundCrash', data => logEvent('Game crashed at: ' + data.crashPoint));
+    socket.on('cashoutResult', msg => logEvent('Cashout: ' + JSON.stringify(msg)));
+    socket.on('cashoutError', msg => logEvent('Error: ' + msg));
+  </script>
+</body>
+</html>
